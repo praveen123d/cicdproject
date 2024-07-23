@@ -1,0 +1,45 @@
+---
+- hosts: jenkins-slave
+  become: true
+  tasks:
+    - name: update Ubuntu repository and cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: install Java (OpenJDK 11)
+      apt:
+        name: openjdk-11-jre
+        state: present
+
+    - name: download Apache Maven
+      get_url:
+        url: https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
+        dest: /opt
+
+    - name: extract Apache Maven
+      unarchive:
+        src: /opt/apache-maven-3.9.6-bin.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Ensure /var/run/docker.sock has 777 permissions
+      file:
+        path: /var/run/docker.sock
+        state: touch
+        mode: '0777'
+
+    - name: Enable Docker service on boot
+      service:
+        name: docker
+        enabled: yes
