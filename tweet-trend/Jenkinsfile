@@ -63,7 +63,7 @@ pipeline {
                 script {
                     echo '<--------------- Docker Publish Started --------------->'
                     docker.withRegistry(registry, 'jfrog-cred') {
-                        app.push(version) // Push the image with the specified version
+                        app.push()
                     }
                     echo '<--------------- Docker Publish Ended --------------->'
                 }
