@@ -26,7 +26,8 @@ environment {
                  echo "----------- unit test Complted1 ----------"
             }
         }
-stage("Jar Publish") {
+   }
+   stage("Jar Publish") {
         steps {
             script {
                     echo '<--------------- Jar Publish Started --------------->'
@@ -65,11 +66,10 @@ stage("Jar Publish") {
                echo '<--------------- Docker Publish Started --------------->'  
                 docker.withRegistry(registry, 'jfrog-cred'){
                     app.push()
-                }    
+                }
                echo '<--------------- Docker Publish Ended --------------->'  
             }
         }
     }
-
 }
 }
