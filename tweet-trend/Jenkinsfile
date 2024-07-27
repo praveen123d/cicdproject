@@ -1,5 +1,5 @@
 def registry = 'https://valaxy1102.jfrog.io/'
-def imageName = 'valaxy1102.jfrog.io/valaxy-docker-local/ttrend'
+def imageName = 'valaxy1102.jfrog.io/valaxt-docker-local/ttrend'
 def version = '2.1.2'
 
 pipeline {
@@ -55,6 +55,17 @@ pipeline {
                     echo '<--------------- Docker Build Started --------------->'
                     app = docker.build("${imageName}:${version}")
                     echo '<--------------- Docker Build Ended --------------->'
+                }
+            }
+        }
+        stage("Docker Publish") {
+            steps {
+                script {
+                    echo '<--------------- Docker Publish Started --------------->'
+                    docker.withRegistry(registry, 'jfrog-cred') {
+                        app.push()
+                    }
+                    echo '<--------------- Docker Publish Ended --------------->'
                 }
             }
         }
